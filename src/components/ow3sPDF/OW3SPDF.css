@@ -1,0 +1,5 @@
+.OW3S_PDF_object{
+    width: 100%;
+    /* le 31 est la taille du header */
+    height: calc(100% - 31px);
+}

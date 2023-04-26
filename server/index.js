@@ -81,6 +81,7 @@ const express = require("express");
 const cors = require("cors");
 const http = require("http");
 const socketio = require("socket.io");
+const libSocket = require("./sockets");
 
 const PORT = process.env.PORT || 3001;
 
@@ -95,6 +96,8 @@ app.use(cors());
 app.use(express.static(path.resolve(__dirname, '../build')));
 app.use(express.json());
 app.use("/data/img", express.static(path.join(__dirname, "data/img")));
+
+libSocket.socketConnection(io);
 
 
 app.get('*', (req, res) => {
