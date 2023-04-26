@@ -34,8 +34,21 @@ const registerUser = (socket,data) => {
     });
 };
 
+const signIn = (socket, data) => {
+    return new Promise((resolve, reject) => {
+        socket.emit("sign in", data, (response) => {
+            if (response.codeRet > 0) {
+                resolve(response.data);
+            } else {
+                reject(response.error);
+            }
+        });
+    });
+};
+
 module.exports = {
     getPassCodeVideo,
     sendVideoToOriginalDevice,
-    registerUser
+    registerUser,
+    signIn
 }

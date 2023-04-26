@@ -82,6 +82,9 @@ const cors = require("cors");
 const http = require("http");
 const socketio = require("socket.io");
 const libSocket = require("./sockets");
+const db = require("./models");
+const initDataDev = require("./init/dev");
+
 
 const PORT = process.env.PORT || 3001;
 
@@ -99,6 +102,13 @@ app.use("/data/img", express.static(path.join(__dirname, "data/img")));
 
 libSocket.socketConnection(io);
 
+const isDev = process.env.REACT_APP_ENV === 'dev';
+db.sequelize.sync({ force: isDev }).then(async () => {
+    //ici créer des utilisateurs pour ne pas avoir à faire l'inscription à chaque fois
+    // et lancer l'environnement de developpement du réseau hedera
+    // et mettre les données fictives dans cette ce réseau aussi
+    initDataDev();
+});
 
 app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../build', 'index.html'));

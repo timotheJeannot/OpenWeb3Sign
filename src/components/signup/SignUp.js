@@ -8,6 +8,7 @@ import Camera from "../camera/Camera";
 import { SocketContext } from "../../context/socket";
 import userSocketService from "../../service/socket/user-socket.service";
 import QRCode from "react-qr-code";
+import { useNavigate } from "react-router-dom";
 
 
 const SignUp = () => {
@@ -28,6 +29,8 @@ const SignUp = () => {
     const [URLState, setURLState] = useState(undefined);
 
     const socket = useContext(SocketContext);
+
+    const navigate = useNavigate();
 
     // voir quelle valeur limite il faut mettre pour ce genre de fichier
     const FILE_SIZE_LIMIT = 40 * 1048576; //https://stackoverflow.com/questions/5697605/limit-the-size-of-a-file-upload-html-input-element
@@ -93,7 +96,7 @@ const SignUp = () => {
 
     const handleSignUp = () => {
         if (!bufferVideo) {
-            setAlertMessage("la vérification vidéo est obligatoire");
+            setAlertMessage({variant : "danger", message : "la vérification vidéo est obligatoire"});
             return;
         }
         setAlertMessage(null);
@@ -110,8 +113,14 @@ const SignUp = () => {
         userSocketService.registerUser(socket, dataToSend).then(response => {
             console.log("utilisateur enregistré");
             console.log(response);
+            setAlertMessage({variant : "success" , message : "Inscription réussi, redirection vers la page connexion"})
+            setTimeout(() => {
+                navigate("/sign_in")
+            },3000)
+            
         }).catch(error => {
             console.error(error)
+            setAlertMessage({variant : "danger", message : error});
         })
     };
 
@@ -336,8 +345,8 @@ const SignUp = () => {
 
                     {
                         alertMessage &&
-                        <Alert variant="danger" className="mt-3 text-center">
-                            {alertMessage}
+                        <Alert variant={alertMessage.variant} className="mt-3 text-center">
+                            {alertMessage.message}
                         </Alert>
                     }
 
