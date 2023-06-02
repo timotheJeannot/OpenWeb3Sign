@@ -46,9 +46,22 @@ const signIn = (socket, data) => {
     });
 };
 
+const sendCSR = (socket,data) => {
+    return new Promise((resolve, reject) => {
+        socket.emit("send csr", data, (response) => {
+            if (response.codeRet > 0) {
+                resolve(response.data);
+            } else {
+                reject(response.error);
+            }
+        });
+    });
+} 
+
 module.exports = {
     getPassCodeVideo,
     sendVideoToOriginalDevice,
     registerUser,
-    signIn
+    signIn,
+    sendCSR
 }

@@ -6,6 +6,10 @@ const NavigationBar = () => {
 
     const currentUser = useContext(UserContext);
 
+    const logout = () => {
+        localStorage.removeItem("user");
+    }
+
     const render = () => {
         if (!currentUser) {
             return <Navbar bg="dark" variant="dark" expand="lg">
@@ -34,6 +38,9 @@ const NavigationBar = () => {
                         <Nav.Link href="/create_signature">Créer une signature</Nav.Link>
                         <Nav.Link href="/search">Recherche signataire</Nav.Link>
                         <Nav.Link href="/api">API</Nav.Link>
+                    </Nav>
+                    <Nav>
+                        <Nav.Link href="/" onClick={logout}>Déconnexion</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

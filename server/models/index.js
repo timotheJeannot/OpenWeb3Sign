@@ -9,7 +9,7 @@ const sequelize = new Sequelize(
         port: config.PORT,
         dialect: config.dialect,
         operatorsAliases: false,
-        // logging: false,
+        logging: false,
 
         pool: {
             max: config.pool.max,
@@ -26,5 +26,13 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.user = require("./user/user.model.js")(sequelize, Sequelize);
+db.key = require("./key/key.model.js")(sequelize, Sequelize);
+
+db.user.hasMany(db.key, {
+    foreignKey: "userId",
+    onDelete: "cascade",
+    hooks: true
+});
+
 
 module.exports = db;
